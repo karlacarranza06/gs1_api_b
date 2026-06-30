@@ -50,7 +50,7 @@ def actualizar_gln(gln_id: str, datos: GLNUpdate, payload: dict = Depends(solo_a
     if not existe.data:
         raise HTTPException(status_code=404, detail="GLN no encontrado")
 
-    actualizacion = {k: v for k, v in datos.model_dump().items() if v is not None}
+    actualizacion = {k: v for k, v in datos.model_dump().items() if v is not None or k == "activo"}
     if not actualizacion:
         raise HTTPException(status_code=400, detail="No hay datos para actualizar")
 

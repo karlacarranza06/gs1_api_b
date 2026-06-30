@@ -51,7 +51,7 @@ def actualizar_gtin(gtin_id: str, datos: GTINUpdate, payload: dict = Depends(sol
     if not existe.data:
         raise HTTPException(status_code=404, detail="GTIN no encontrado")
 
-    actualizacion = {k: v for k, v in datos.model_dump().items() if v is not None}
+    actualizacion = {k: v for k, v in datos.model_dump().items() if v is not None or k == "activo"}
     if not actualizacion:
         raise HTTPException(status_code=400, detail="No hay datos para actualizar")
 
