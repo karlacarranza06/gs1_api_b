@@ -72,3 +72,23 @@ def generar_respuesta(datos: list, formato: str, nombre: str) -> StreamingRespon
         media_type="text/csv",
         headers={"Content-Disposition": f"attachment; filename={nombre}.csv"}
     )
+
+    # Transforma booleanos para CSV
+    datos_csv = []
+    for row in datos:
+        fila = dict(row)
+        if "activo" in fila:
+            fila["activo"] = "Activo" if fila["activo"] else "Inactivo"
+        datos_csv.append(fila)
+
+    output = io.StringIO()
+    writer = csv.DictWriter(output, fieldnames=datos_csv[0].keys())
+    writer.writeheader()
+    writer.writerows(datos_csv)
+    output.seek(0)
+
+    return StreamingResponse(
+        output,
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={nombre}.csv"}
+    )
